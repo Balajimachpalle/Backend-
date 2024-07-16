@@ -22,7 +22,7 @@ const registerUser =asynch(async(req,res)=>{
     // return response
 
     const {username,email,fullname,password}=req.body
-    console.log("emial: ",email)
+    
     // stpe2
     if(username ===""){
         throw new ApiError(400,"all fields are require")
@@ -38,7 +38,7 @@ const registerUser =asynch(async(req,res)=>{
     }
      
     //step3
-    const exitUser=User.findOne({
+    const exitUser=await User.findOne({
         $or:[{email},{username}]
     })
     if(exitUser){
@@ -46,25 +46,29 @@ const registerUser =asynch(async(req,res)=>{
     }
     
     //step 4
-    const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
-    if (!avatarLocalPath) {
-        throw new ApiError(400, "avatar file is required")
-    }
-    const avatar = await uploadOnCloudinary(avatarLocalPath)
-    const coverImage= await uploadOnCloudinary(coverImageLocalPath)
-    if (!avatar) {
-        throw new ApiError(400, "avatar file is required")
-    }
-    if (!coverImage) {
-        throw new ApiError(400, "coverImage file is required")
-    }
+    // const avatarLocalPath = await req.files?.avatar[0]?.path;
+   
+    // const coverImageLocalPath = await req.files?.coverImage[0]?.path;
+    // let coverImageLocalPath;
+    // if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length >0 ){
+    //     coverImageLocalPath = req.files.coverImage[0].path
+    // }
+
+    // if (!avatarLocalPath) {
+    //     throw new ApiError(400, "avatar file is required")
+    // }
+    // const avatar = await uploadOnCloudinary(avatarLocalPath)
+    // const coverImage= await uploadOnCloudinary(coverImageLocalPath)
+    // if (!avatar) {
+    //     throw new ApiError(400, "avatar file is failed")
+    // }
+    
 
     //step 5
     const user = await User.create({
         fullname,
-        avatar:avatar.url,
-        coverImage:coverImage?.url || "",
+        // avatar: avatar.url,
+        // coverImage: coverImage?.url || "",
         email,
         username:username.toLowerCase(),
         password

@@ -29,7 +29,7 @@ const userSchema=new Schema({
     },
     avatar:{
         type:String ,//couldanary
-        required:true
+        
     },
     coverImage:{
         type:String
